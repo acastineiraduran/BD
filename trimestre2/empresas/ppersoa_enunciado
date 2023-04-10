@@ -1,0 +1,13 @@
+
+ppersoa
+procedemento chamdo ppersoa que amose para unha persoa cuxo dni se pasa por parámetro o seu nome e os postos para os que se lle fixeron entrevistas e o nome e apelidos do xestor que llas fixo 
+
+
+execute ppersoa(36555555);
+
+persoa: elisa,bermudez,bastos
+postos e xestor que o xestionou:
+p1 : ricardo,leiro,suarez
+p342 : eva,bastos,boullosa
+p14 : ricardo,leiro,suarez
+
