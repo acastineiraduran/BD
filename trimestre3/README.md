@@ -21,8 +21,6 @@ CREATE USER u1 WITH PASSWORD 'u1';
 # PERMISOS
 ```
 
-----------------------------------------------
-
 ## Bases de datos
 
 ```SQL
@@ -41,7 +39,6 @@ GRANT CONNECT ON DATABASE basex TO u1;
 REVOKE CONNECT ON DATABASE basex FROM PUBLIC;
 
 ```
----------------------------------------------
 
 ## Esquemas
 
@@ -72,7 +69,6 @@ GRANT USAGE ON SCHEMA e1 TO u2;
 --cambiar ruta por defecto
 ALTER USER u1 IN DATABASE basex SET SEARCH_PATH TO e1;
 ```
-----------------------------------------------------
 
 ## Tablas
 Si especificas se muestra el de por defecto (generalmente public)
@@ -109,8 +105,6 @@ GRANT SELECT(nome) ON e2.basex_e2_u2_t1 TO u1;
 GRANT INSERT ON e1.basex_e1_u1_t1 TO u2;
 
 ```
-
-----------------------------------------------------
 
 ## Otros
 ```SQL
