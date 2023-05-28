@@ -6,19 +6,23 @@ c\ postgres postgres
 ```
 
 ## USUARIOS
-### INFORMACION
+### Informacion
 
 ```SQL
-select user; --usuario actual
+--ver usuario actual
+select user;
+--describe usuarios, ver usuarios
+\du
 ```
 
-### CREAR/ELIMINAR
+### Crear/eliminar
 
 ```SQL
+--crear un usuario
 CREATE USER u1 WITH PASSWORD 'u1';
 ```
 
-### PERMISOS
+### Permisos
 
 ```SQL
 
@@ -27,47 +31,48 @@ CREATE USER u1 WITH PASSWORD 'u1';
 ----------------------------------------------
 
 ## BASES DE DATOS
-### INFORMACION
 
 ```SQL
-\l --lista de bases de datos, privilegios y propietarios
-```
+# info
+--lista de bases de datos, privilegios y propietarios
+\l 
 
-### CREAR/ELIMINAR
-
-```SQL
+# crear/eliminar
+--crear una base de datos
 CREATE DATABASE basex;
-```
 
-### PERMISOS
-
-```SQL
---quitar permiso conectarse a public en base de datos. RECOMENDABLE al principio.
-REVOKE CONNECT ON DATABASE basex FROM PUBLIC;
+# permisos
 --permiso para conectarme con un usuario a una base de datos
 GRANT CONNECT ON DATABASE basex TO u1;
+--quitar permiso conectarse a public en base de datos. RECOMENDABLE al principio.
+REVOKE CONNECT ON DATABASE basex FROM PUBLIC;
 
 ```
 ---------------------------------------------
 
 ## ESQUEMAS
-### INFORMACION
+### Informacion
 
 ```SQL
-\dn --lista de esquemas
+--lista de esquemas, ver esquemas
+\dn
+--lista detallada de todos los esquemas: privilegios esquemas etc
+\dn+
 
 ```
 
-### CREAR/ELIMINAR
+### Crear/eliminar
 
 ```SQL
 --crear schema por defecto de public
 CREATE SCHEMA e2;
 --crear esquema y asignarlo a un usuario en un solo paso
 CREATE SCHEMA e1 AUTHORIZATION u1;
+--eliminar una base de datos
+DROP DATABASE proba1;
 ```
 
-### PERMISOS
+### Permisos
 
 ```SQL
 --cambiar propietario del esquema
@@ -76,16 +81,24 @@ CREATE SCHEMA e1 AUTHORIZATION u1;
 REVOKE CREATE ON SCHEMA public FROM public;
 --cambiar propietario del esquema
 ALTER SCHEMA e2 OWNER TO u2;
---permite al usuario acceder y utilizar los objetos contenidos dentro del esquema PREVIO A DAR PERMISOS EN CUALQUIER TABLA
+--permite al usuario acceder y utilizar los objetos contenidos dentro del esquema-IMPORTANTE
 GRANT USAGE ON SCHEMA e1 TO u2;
+--cambiar ruta por defecto
+ALTER USER u1 IN DATABASE basex SET SEARCH_PATH TO e1;
 ```
 ----------------------------------------------------
 
 ## TABLAS
 ### INFORMACION
+Si especificas se muestra el de por defecto (generalmente public)
 
 ```SQL
-\z e1.* --ver informacion de tablas de un esquema especifico
+--informacion de tablas
+\d
+--ver informacion de tablas detallada: privilegios tablas etc
+\z
+--ver informacion de tablas detallada especificando el esquema
+\z e1.*
 ```
 
 ### CREAR/ELIMINAR
@@ -93,7 +106,17 @@ GRANT USAGE ON SCHEMA e1 TO u2;
 ```SQL
 --crear tabla en un esquema especifico
 CREATE TABLE e1.basex_e1_u1_t1 (codigo INTEGER, nome VARCHAR(20));
+--eliminar una tabla
+DROP TABLE proba1;
+
+--insertar valores en una tabla
 INSERT INTO  e1.basex_e1_u1_t1 VALUES (1,'lila') ;
+--actualizar valores de una tabla
+UPDATE e1.proba1 SET nome='pedro' WHERE codigo=2;
+--añadir una columna a una tabla
+ALTER TABLE e1.proba1 ADD COLUMNS nome VARCHAR(20);
+--añadir una clave primaria (ningun campo puede ser nulo)
+ALTER TABLE e1.proba1 ADD PRIMARY KEY(codigo);
 ```
 
 
@@ -107,6 +130,14 @@ GRANT SELECT(nome) ON e2.basex_e2_u2_t1 TO u1;
 --permiso para insertar valores dentro de una tabla
 GRANT INSERT ON e1.basex_e1_u1_t1 TO u2;
 
+```
+
+----------------------------------------------------
+
+## Otros
+```SQL
+--ruta de busqueda por defecto para la asignacion de tablas. Por defecto public
+\SHOW SEARCH PATH
 ```
 
 
