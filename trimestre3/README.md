@@ -232,7 +232,7 @@ pg_restore -U postgres -d futbol2 -L lista.txt fuc2.dump
 ```
 
 `-T`=template, indica que usa como ref la base template(). Es una plantilla que contiene las cosas necesarias para la tabla. **esto creo que solo lo puedo hacer porque el formato es -Fc**
-----------------
+
 ## Clausulas
 * `USAGE` permisos de acceso a un objeto pero no permisos de modificacion o ejecución
 * `DROP` elimina estructura y contenido
