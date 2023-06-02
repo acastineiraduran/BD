@@ -6,6 +6,14 @@ sudo -u postgres psql
 psql futbol2 userfu -psql <bd> <usu>
 ```
 
+Formato permisos
+```SQL
+GRANT <clausula> ON <type> <name> TO <grantee>
+REVOKE <clausula> ON <type> <name> FROM <grantee>
+```
+
+`ON <type> <name>` --> no obligatoria
+
 ## Usuarios
 
 ```SQL
@@ -35,13 +43,13 @@ CREATE USER u1 WITH PASSWORD 'u1';
 
 # CREAR/ELIMINAR
 --crear rol
-creat role readonli;
+create role readonli;
 
 # PERMISOS
 --otorgar permisos de uso de un schema para el rol readonly.
 GRANT USAGE ON SCHEMA sa TO readonly;
 --asignar un rol a un usuario? creo que solo lo puede hacer postgres
-GRANT READONLY TO ub;
+GRANT readonly TO ub;
 --ver privilegios sobre tablas que tienen un rol // creo que solo te estaria mostrando una parte???
 SELECT * FROM information_schema.table_privileges WHERE GRANTEE='readonly'
 
@@ -57,17 +65,17 @@ SELECT * FROM information_schema.table_privileges WHERE GRANTEE='readonly'
 
 # CREAR/ELIMINAR
 --crear una base de datos
-CREATE DATABASE basex;
+CREATE database basex;
 --borrar base de datos
-DROP DATABASE dam1;
+DROP database dam1;
 --borrar base de datos desde el usuario del sistema (despues de darle a \q)
 DROP -U postgres futbol2 --postgres creo que siempre
 
 # PERMISOS
 --permiso para conectarme con un usuario a una base de datos
-GRANT CONNECT ON DATABASE basex TO u1;
+GRANT CONNECT ON database basex TO u1;
 --quitar permiso conectarse a public en base de datos. RECOMENDABLE al principio.
-REVOKE CONNECT ON DATABASE basex FROM PUBLIC;
+REVOKE CONNECT ON database basex FROM public;
 
 ```
 
@@ -89,11 +97,11 @@ CREATE SCHEMA e1 AUTHORIZATION u1;
 
 # PERMISOS
 --revoca privilegio de creación de objetos en el esquema public para el rol public
-REVOKE CREATE ON SCHEMA public FROM public;
+REVOKE CREATE ON schema public FROM public;
 --cambiar propietario del esquema
-ALTER SCHEMA e2 OWNER TO u2;
+ALTER schema e2 OWNER TO u2;
 --permite al usuario acceder y utilizar los objetos contenidos dentro del esquema-IMPORTANTE
-GRANT USAGE ON SCHEMA e1 TO u2;
+GRANT USAGE ON schema e1 TO u2;
 ```
 
 ## Tablas
@@ -114,7 +122,7 @@ CREATE TABLE e1.basex_e1_u1_t1 (codigo INTEGER, nome VARCHAR(20));
 --eliminar una tabla
 DROP TABLE proba1;
 --insertar valores en una tabla
-INSERT INTO  e1.basex_e1_u1_t1 VALUES (1,'lila') ;
+INSERT INTO e1.basex_e1_u1_t1 VALUES (1,'lila') ;
 --actualizar valores de una tabla
 UPDATE e1.proba1 SET nome='pedro' WHERE codigo=2;
 --añadir una columna a una tabla
