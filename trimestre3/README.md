@@ -137,7 +137,7 @@ FROM information_schema.column_privileges --tabla de ese esquema que contiene in
 WHERE grantee='u3';--permisos otorgados por u3
 ```
 
-## Otros - POR DEFECTO
+## Otros - **por defecto**
 ```SQL
 --ruta de busqueda por defecto para la asignacion de tablas. Por defecto public
 SHOW search_path;
@@ -149,7 +149,7 @@ ALTER USER POSTGRES IN DATABASE basex SET search_path TO public,sa,sb;--NO ACTUA
 
 ------------
 
-## COPIAS DE SEGURIDAD
+## Copias de seguridad
 1. Simplemente lanzarimos el script de la copia de seguridad `\i ‘nombreScript_deLaCopiaSeguridad’`
 2. `pg_dump` la copia de seguridad creado no copia usuarios
 3. No puedo exportar cosas que no son mias
@@ -162,14 +162,14 @@ Generalmente se usa **postgres** como base de referencia (base_ref)
 ### Exportar a una copia de seguridad
 
 ```SQL
-# dependiendo el formato
+# TIPOS EXPORTACION DEPENDIENDO DEL FORMATO
 --copia de seguridad (para regenerar bd) con todo incluso INSERTs...pero NO los usuarios
 --hacer copia base de datos en texto plano
 pg_dump -U postgres -Fp basex > basexplana.dump
 --hacer copia comprimida de la base de datos
 pg_dump -U postgres -Fc basex > basexcomprimida.dump
 
-# Condiciones de exportacion
+# CONDICIONES DE EXPORTACION
 --exportar incluyendo (para excluir es con '-T') solo tablas específicas
 pg_dump -U ua -t 'sa.probauat1' --inserts -Fp basex > uat1.dump
 --exportar incluyendo (para excluir es con '-N') solo esquemas específicos
@@ -177,7 +177,7 @@ pg_dump -U ua -n 'sa.probauat1' --inserts -Fp basex > uat1.dump
 --varias condiciones de exportacion (tanto con Fp como Fc)
 pg_dump -U postgres -t 'fu.x*' -t 'fu.adestra' -t 'fu.interven' -Fp futbol2 > fup2.dump
 
-# otros
+# OTROS
 --crear una base con un nombre distinto a partir de la base comprimida
 createdb -U postgres -D basez basecomprimida.dump
 --porque inserts????
@@ -192,35 +192,35 @@ pg_dump -U ua -t 's*.p*' --inserts -Fp basex > uat1.dump
 si quiero combinar tablas y esquemas específicos lo hago solo con `-t`**
 
 ### Restaurar a partir de copia de seguridad
-Restaurar a partir de archivo en formato texto plano. Proceso:
+A. Restaurar a partir de archivo en formato texto plano. Proceso:
 ```SQL
-# Paso previo: copia en txt plano y borrado de bd
+# PASO PREVIO copia en txt plano y borrado de bd
 \q
 pg_dump -U postgres -Fp futbol2 > f2.dump
 dropdb -U postgres futbol2
 
-# Recuperacion
+# RECUPERACION
 psql postgres postres
 CREATE DATABASE futbol2
 \c futbol2
 \i '/home/oracle/f2.dump'
 ```
 
-Restaurar a partir de archivo en formato comprimido. Proceso:
+B. Restaurar a partir de archivo en formato comprimido. Proceso:
 ```SQL
-# Paso previo
+# PASO PREVIO
 \q
 pg_dump -U postgres -Fc futbol2 > futbol2Comprimido.dump
 drodb -U postgres futbol2
 
-# Recuperacion/restauracion
+# RECUPERACION
 --A. recuperacion de base de datos completa
 pg_restore -U postgres -C -d postgres futbol2Comprimido.dump
 --B. recuperar las base comprimida en una nueva base con otro nombre distinto
 createdb -U postgres -T template0 baseZ 
 pg_restore -U postgres -d futbol3 futbol2Comprimido.dump
 
-# Recuperacion a partir del resumen y la bd con formato comprimido
+# RECUPERACION a partir del resumen y la bd con formato comprimido
 \q
 --Va a hacer un listado en formato especial (legible) basado en lo que hay en basexcomprimida y lo va a meter en listado.txt
 pg_restore -l basexcomprimida.dump > listado.txt
@@ -230,9 +230,10 @@ gedit lista.txt
 pg_restore -U postgres -d futbol2 -L lista.txt fuc2.dump
 
 ```
+
 `-T`=template, indica que usa como ref la base template(). Es una plantilla que contiene las cosas necesarias para la tabla. **esto creo que solo lo puedo hacer porque el formato es -Fc**
 ----------------
-## CLAUSULAS
+## Clausulas
 * `USAGE` permisos de acceso a un objeto pero no permisos de modificacion o ejecución
 * `DROP` elimina estructura y contenido
 * `DELETE` elimina solo el contendio
